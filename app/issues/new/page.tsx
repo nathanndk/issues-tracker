@@ -1,12 +1,9 @@
 "use client";
 
 import {
-  TextArea,
   TextField,
   TextFieldInput,
   Button,
-  CalloutRoot,
-  CalloutText,
   Callout,
 } from "@radix-ui/themes";
 import SimpleMDE from "react-simplemde-editor";
