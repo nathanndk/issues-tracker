@@ -1,6 +1,8 @@
 'use client';
 
 import { TextArea, TextField, TextFieldInput } from '@radix-ui/themes'
+import SimpleMDE from "react-simplemde-editor";
+import "easymde/dist/easymde.min.css";
 import React from 'react'
 
 export default function NewIssuesPage() {
@@ -10,7 +12,7 @@ export default function NewIssuesPage() {
         <TextFieldInput placeholder='title'/>
       </TextField.Root>
 
-      <TextArea placeholder='description'/>
+      <SimpleMDE placeholder='description'/>
 
     
     </div>
