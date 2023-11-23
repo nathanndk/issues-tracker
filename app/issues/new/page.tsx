@@ -38,6 +38,7 @@ export default function NewIssuesPage() {
       router.push("/issues");
     } catch (error) {
       setSubmitting(false);
+      console.error("Error submitting data:", error);
       setError("Something went wrong");
     }
   });
@@ -63,6 +64,11 @@ export default function NewIssuesPage() {
           )}
         />
         <ErrorMessage> {errors.description?.message}</ErrorMessage>
+
+        {/* <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Submitting..." : "Submit New Issue"}
+          {isSubmitting && <Spinner />}
+        </Button> */}
 
         <Button disabled={isSubmitting}>
           Submit New Issue
