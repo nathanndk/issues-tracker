@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  TextField,
-  TextFieldInput,
-  Button,
-  Callout,
-  Text,
-} from "@radix-ui/themes";
+import { TextField, TextFieldInput, Button, Callout } from "@radix-ui/themes";
 import SimpleMDE from "react-simplemde-editor";
 import { useForm, Controller } from "react-hook-form";
 import "easymde/dist/easymde.min.css";
@@ -17,6 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createIssuesSchema } from "@/app/ValidationSchemas";
 import { z } from "zod";
 import ErrorMessage from "@/app/components/errorMessage";
+import Spinner from "@/app/components/Spinner";
 
 type issuesForm = z.infer<typeof createIssuesSchema>;
 
@@ -36,6 +31,16 @@ export default function NewIssuesPage() {
   });
   const router = useRouter();
   const [error, setError] = useState("");
+  const [isSubmitting, setSubmitting] = useState(false);
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      await axios.post("/api/issues", data);
+      router.push("/issues");
+    } catch (error) {
+      setSubmitting(false);
+      setError("Something went wrong");
+    }
+  });
 
   return (
     <div className="max-w-xl">
@@ -44,17 +49,7 @@ export default function NewIssuesPage() {
           <Callout.Text>{error}</Callout.Text>
         </Callout.Root>
       )}
-      <form
-        className="max-w-xl space-y-3 "
-        onSubmit={handleSubmit(async (data) => {
-          try {
-            await axios.post("/api/issues", data);
-            router.push("/issues");
-          } catch (error) {
-            setError("Something went wrong");
-          }
-        })}
-      >
+      <form className="max-w-xl space-y-3 " onSubmit={onSubmit}>
         <TextField.Root>
           <TextFieldInput placeholder="Title" {...register("title")} />
         </TextField.Root>
@@ -69,7 +64,10 @@ export default function NewIssuesPage() {
         />
         <ErrorMessage> {errors.description?.message}</ErrorMessage>
 
-        <Button>Submit New Issue</Button>
+        <Button disabled={isSubmitting}>
+          Submit New Issue
+          {isSubmitting && <Spinner />}
+        </Button>
       </form>
     </div>
   );
